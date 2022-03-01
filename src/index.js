@@ -1,7 +1,7 @@
 const express = require("express");
 const { omit } = require("lodash");
 
-const repositoriesDb = require("./db/repositories.db");
+const repositoriesRepository = require("./repositories/repositories");
 const createRequestContext = require("./middlewares/create-request-context");
 const ensureRepositoryExists = require("./middlewares/ensure-repository-exists");
 
@@ -11,14 +11,14 @@ app.use(express.json());
 app.use(createRequestContext);
 
 app.get("/repositories", (request, response) => {
-  const repositories = repositoriesDb.list();
+  const repositories = repositoriesRepository.list();
   return response.json(repositories);
 });
 
 app.post("/repositories", (request, response) => {
   const { title, url, techs } = request.body;
 
-  const repository = repositoriesDb.create({ title, url, techs });
+  const repository = repositoriesRepository.create({ title, url, techs });
 
   return response.status(201).json(repository);
 });
@@ -26,14 +26,14 @@ app.post("/repositories", (request, response) => {
 app.put("/repositories/:id", ensureRepositoryExists, (request, response) => {
   const { id } = request.params;
   const updatePatch = omit(request.body, "likes");
-  const repository = repositoriesDb.update(id, updatePatch);
+  const repository = repositoriesRepository.update(id, updatePatch);
 
   return response.json(repository);
 });
 
 app.delete("/repositories/:id", ensureRepositoryExists, (request, response) => {
   const { id } = request.params;
-  repositoriesDb.remove(id);
+  repositoriesRepository.remove(id);
   return response.status(204).send();
 });
 
@@ -49,7 +49,7 @@ app.post(
     const repository = context.get("repository");
     repository.likes += 1;
 
-    const updated = repositoriesDb.update(id, repository);
+    const updated = repositoriesRepository.update(id, repository);
 
     return response.json(updated);
   }

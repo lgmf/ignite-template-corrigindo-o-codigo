@@ -1,10 +1,10 @@
-const repositoriesDb = require("../db/repositories.db");
+const repositoriesRepository = require("../repositories/repositories");
 
 module.exports = (req, res, next) => {
   const { context } = req;
   const { id } = req.params;
 
-  const repository = repositoriesDb.findById(id);
+  const repository = repositoriesRepository.findById(id);
 
   if (!repository) {
     return res.status(404).json({ error: "Repository not found" });

@@ -1,8 +1,8 @@
-const { v4: uuid } = require("uuid");
+const Repository = require("../models/repository");
 
 const repositoryMap = new Map();
 
-class RepositoriesDb {
+class RepositoriesRepository {
   list() {
     return Array.from(repositoryMap.values());
   }
@@ -11,18 +11,10 @@ class RepositoriesDb {
     return repositoryMap.get(id);
   }
 
-  create(repository) {
-    const id = uuid();
-
-    const newRepository = {
-      ...repository,
-      id,
-      likes: 0,
-    };
-
-    repositoryMap.set(id, newRepository);
-
-    return newRepository;
+  create({ title, url, techs }) {
+    const repositoryModel = new Repository({ title, url, techs });
+    repositoryMap.set(repositoryModel.id, repositoryModel);
+    return repositoryModel;
   }
 
   update(id, updatePatch) {
@@ -47,4 +39,4 @@ class RepositoriesDb {
   }
 }
 
-module.exports = new RepositoriesDb();
+module.exports = new RepositoriesRepository();
