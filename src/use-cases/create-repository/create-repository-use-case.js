@@ -1,4 +1,4 @@
-const repositoriesRepository = require("../repositories/repositories");
+const repositoriesRepository = require("../../repositories/repositories");
 
 class CreateRepositoryUseCase {
   execute({ title, url, techs }) {

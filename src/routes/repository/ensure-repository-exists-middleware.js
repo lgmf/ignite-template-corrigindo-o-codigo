@@ -1,4 +1,6 @@
-const findRepositoryById = require("../usecases/find-repository-by-id");
+const {
+  findRepositoryByIdUseCase,
+} = require("../../use-cases/find-repository-by-id");
 
 module.exports = (req, res, next) => {
   const {
@@ -7,7 +9,7 @@ module.exports = (req, res, next) => {
   } = req;
 
   try {
-    const repository = findRepositoryById.execute(id);
+    const repository = findRepositoryByIdUseCase.execute(id);
     context.set("repository", repository);
     next();
   } catch (error) {
